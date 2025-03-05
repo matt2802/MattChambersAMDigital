@@ -75,12 +75,40 @@ test.describe("test core functionality of quartex", async () => {
     await expect(newTab).toHaveURL(TEST_DATA.EXPECTED_URL);
   });
 
-  test.skip("browse by collection", async () => {
+  test("browse by collection", async ({ page }) => {
     /* 
     GIVEN user is viewing the Browse by collection Name A-Z content block
     WHEN user selects a <Letter> to browse
     THEN the page is scrolled to display all collections starting with the chosen <Letter>
     AND the expected <Collection> is displayed
     */
+
+    const TEST_DATA = {
+      LETTER: "W",
+      COLLECTION: "War & Conflict",
+    };
+
+    await page
+      .getByTestId("site-main-menu")
+      .getByRole("link", { name: "Explore the Collections" })
+      .click();
+
+    // this is necessary because the test was trying to click the button before
+    // the page was fully loaded in firefox
+    await page.waitForLoadState("load");
+
+    // playwrights autoscrolling should automatically bring the button into view
+    await page
+      .getByLabel(`Letter ${TEST_DATA.LETTER} link`)
+      .getByText(TEST_DATA.LETTER)
+      .click();
+
+    // assert header and content are in the viewport
+    await expect(
+      page.getByRole("heading", { name: TEST_DATA.LETTER, exact: true })
+    ).toBeInViewport();
+    await expect(
+      page.getByRole("link", { name: TEST_DATA.COLLECTION })
+    ).toBeInViewport();
   });
 });
