@@ -72,7 +72,10 @@ test.describe("test core functionality of quartex", async () => {
 
     // assert new tab opened with correct link
     const newTab = await page.waitForEvent("popup");
-    await expect(newTab).toHaveURL(TEST_DATA.EXPECTED_URL);
+    await expect(
+      newTab,
+      `expected url "${TEST_DATA.EXPECTED_URL}" was not opened in a new tab`
+    ).toHaveURL(TEST_DATA.EXPECTED_URL);
   });
 
   test("browse by collection", async ({ page }) => {
@@ -105,10 +108,12 @@ test.describe("test core functionality of quartex", async () => {
 
     // assert header and content are in the viewport
     await expect(
-      page.getByRole("heading", { name: TEST_DATA.LETTER, exact: true })
+      page.getByRole("heading", { name: TEST_DATA.LETTER, exact: true }),
+      `page did not scroll to title ${TEST_DATA.LETTER}`
     ).toBeInViewport();
     await expect(
-      page.getByRole("link", { name: TEST_DATA.COLLECTION })
+      page.getByRole("link", { name: TEST_DATA.COLLECTION }),
+      `expected collection "${TEST_DATA.COLLECTION}" was not in viewport`
     ).toBeInViewport();
   });
 });
