@@ -21,11 +21,16 @@ Before running tests it may necessary to run the following command to ensure all
 
 ## Running Tests
 
-To run tests, use the following command
+To run tests, use the following command:
 
 ```bash
   npm run test
 ```
+To run tests in a headed mode from the terminal, the --headed flag needs to be provided. Multiple workers are configured ON in this repository, it is highly recommended to limit to 1 worker in playwright.config.ts before doing this.
+```bash
+  npx playwright test --headed
+```
+
 ## What's included
 
 - Tests will execute across the 3 major browsers (Chromium, Firefox, Webkit)
