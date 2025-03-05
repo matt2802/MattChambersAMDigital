@@ -23,8 +23,13 @@ test.describe("test core functionality of quartex", async () => {
     await page.getByTestId("toggleSearchButton").click();
     await page.getByTestId("mastheadSearch").fill(TEST_DATA.SEARCH_TERM);
     await page.getByRole("button", { name: "Apply Search" }).click();
+
+    /* Assumption made here that the expected result is always on page 1
+    If this was not the case the test will need to assert page number and
+    then check each page for the expected result. */
     await expect(
-      page.getByText(TEST_DATA.ASSET_LISTED, { exact: true })
+      page.getByText(TEST_DATA.ASSET_LISTED, { exact: true }),
+      `searching for: "${TEST_DATA.SEARCH_TERM}" did not return the expected result: "${TEST_DATA.ASSET_LISTED}"`
     ).toBeVisible();
   });
 
