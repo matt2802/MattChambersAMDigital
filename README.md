@@ -26,11 +26,6 @@ To run tests, use the following command
 ```bash
   npm run test
 ```
-By default, tests will execute in headless mode. To execute in headed mode, pass in a flag:
-
-```bash
-  npm run test --headed
-```
 ## What's included
 
 - Tests will execute across the 3 major browsers (Chromium, Firefox, Webkit)
