@@ -16,7 +16,7 @@ Email: matt.chambers2802@gmail.com
 ```
 Before running tests it may necessary to run the following command to ensure all browsers are installed:
 ```bash
-  // TODO
+  npx playwright install  
 ```
 
 ## Running Tests
