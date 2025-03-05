@@ -33,7 +33,7 @@ test.describe("test core functionality of quartex", async () => {
     ).toBeVisible();
   });
 
-  test.skip("navigate to link from timeline content block", async () => {
+  test("navigate to link from timeline content block", async ({ page }) => {
     /*
     GIVEN user is on any page of the Quartex Published Site
     AND user has navigated to a <Timeline content block >
@@ -41,6 +41,38 @@ test.describe("test core functionality of quartex", async () => {
     AND user clicks a <Link>available on the <Timeline item>
     THEN the correct <webpage is launched> in a new tab
     */
+
+    const TEST_DATA = {
+      TIMELINE_CONTENT_BLOCK:
+        "https://demo.quartexcollections.com/discovery-aids/the-brownings-a-brief-history",
+      TIMELINE_ITEM: "1845",
+      LINK_TEXT: "one of their first love letters",
+      EXPECTED_URL:
+        "https://demo.quartexcollections.com/Documents/Detail/10-january-1845.-browning-robert-to-browning-elizabeth-barrett./36113",
+    };
+
+    await page.goto(TEST_DATA.TIMELINE_CONTENT_BLOCK);
+
+    const timelineHeading = page.getByRole("heading", {
+      name: TEST_DATA.TIMELINE_ITEM,
+    });
+
+    /* scroll until the correct heading is added to dom and visible
+    this could be a reusable helper function. however I don't need to reuse it so I
+    have kept it here for now
+    if the element does not get found the test will time out */
+
+    while (!(await timelineHeading.isVisible())) {
+      await page.mouse.wheel(0, 500);
+    }
+
+    await page
+      .getByRole("link", { name: TEST_DATA.LINK_TEXT, exact: true })
+      .click();
+
+    // assert new tab opened with correct link
+    const newTab = await page.waitForEvent("popup");
+    await expect(newTab).toHaveURL(TEST_DATA.EXPECTED_URL);
   });
 
   test.skip("browse by collection", async () => {
